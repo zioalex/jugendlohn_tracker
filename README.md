@@ -101,6 +101,17 @@ templates/          # Jinja2 templates (entry, history, summary, setup)
 tests/              # Pytest coverage for config, CSV ops, routes, summary
 ```
 
+## What you can expect
+
+![Main entry](imgs/main_entry.png)
+
+![History](imgs/history.png)
+
+![Summary](imgs/summary.png)
+
+![Setup1](imgs/setup1.png)
+
+![Setup2](imgs/setup2.png)
 ## Notes
 
 - Designed for home-network use; no authentication is implemented.
