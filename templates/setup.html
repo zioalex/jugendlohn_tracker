@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="setup-header">
+    <h1>{{ t('setup_welcome') if not existing_config else t('nav_settings') }}</h1>
+</div>
+
+<form method="post" action="{{ url_for('setup') }}">
+    <!-- Language -->
+    <div class="form-group">
+        <label class="form-label">{{ t('setup_language') }}</label>
+        <div class="btn-group">
+            <button type="button" class="btn lang-select-btn {% if (existing_config and existing_config.language == 'de') or not existing_config %}active{% endif %}" data-value="de">Deutsch</button>
+            <button type="button" class="btn lang-select-btn {% if existing_config and existing_config.language == 'en' %}active{% endif %}" data-value="en">English</button>
+        </div>
+        <input type="hidden" name="language" id="setup-language" value="{{ existing_config.language if existing_config else 'de' }}">
+    </div>
+
+    <!-- Names -->
+    <div class="form-group">
+        <label class="form-label">{{ t('setup_names') }}</label>
+        <p class="form-hint">{{ t('setup_names_help') }}</p>
+        <div id="names-container">
+            {% if existing_config and existing_config.names %}
+                {% for name in existing_config.names %}
+                <div class="name-row">
+                    <input type="text" name="name_{{ loop.index0 }}" class="input-field" value="{{ name }}" placeholder="Name">
+                    <button type="button" class="btn btn-small btn-danger remove-name-btn">&times;</button>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="name-row">
+                    <input type="text" name="name_0" class="input-field" placeholder="Name">
+                    <button type="button" class="btn btn-small btn-danger remove-name-btn">&times;</button>
+                </div>
+            {% endif %}
+        </div>
+        <button type="button" class="btn btn-small add-name-btn" style="margin-top:8px;">+ {{ t('add_name') }}</button>
+    </div>
+
+    <!-- Currency -->
+    <div class="form-group">
+        <label class="form-label">{{ t('setup_currency') }}</label>
+        <input type="text" name="currency" class="input-field" list="currency-list" value="{{ existing_config.currency if existing_config else 'CHF' }}">
+        <datalist id="currency-list">
+            <option value="CHF">
+            <option value="EUR">
+            <option value="USD">
+            <option value="GBP">
+        </datalist>
+    </div>
+
+    <!-- Budget -->
+    <div class="form-group">
+        <label class="form-label">{{ t('setup_budget_enable') }}</label>
+        <div class="btn-group">
+            <label class="btn {% if existing_config and existing_config.budget_enabled %}active{% endif %}">
+                <input type="radio" name="budget_enabled" value="yes" {% if existing_config and existing_config.budget_enabled %}checked{% endif %} style="display:none;">
+                {{ t('yes') }}
+            </label>
+            <label class="btn {% if not existing_config or not existing_config.budget_enabled %}active{% endif %}">
+                <input type="radio" name="budget_enabled" value="no" {% if not existing_config or not existing_config.budget_enabled %}checked{% endif %} style="display:none;">
+                {{ t('no') }}
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group budget-amount-group" style="{% if not existing_config or not existing_config.budget_enabled %}display:none;{% endif %}">
+        <label class="form-label">{{ t('setup_budget_amount') }}</label>
+        <input type="number" name="budget_amount" class="input-field" inputmode="decimal" step="0.01" min="0" value="{{ existing_config.budget_amount if existing_config else '' }}">
+    </div>
+
+    <!-- Categories -->
+    <div class="form-group">
+        <label class="form-label">{{ t('setup_categories') }}</label>
+        {% set cats = existing_config.categories if existing_config and existing_config.categories else default_categories %}
+        {% for cat in cats %}
+        <div class="category-edit-row">
+            <span class="cat-emoji">{{ cat.icon }}</span>
+            <input type="hidden" name="cat_key_{{ loop.index0 }}" value="{{ cat.key }}">
+            <input type="hidden" name="cat_icon_{{ loop.index0 }}" value="{{ cat.icon }}">
+            <input type="text" name="cat_de_{{ loop.index0 }}" class="input-field" value="{{ cat.de }}" placeholder="Deutsch">
+            <input type="text" name="cat_en_{{ loop.index0 }}" class="input-field" value="{{ cat.en }}" placeholder="English">
+        </div>
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="submit-btn">{{ t('setup_save') }}</button>
+</form>
+{% endblock %}

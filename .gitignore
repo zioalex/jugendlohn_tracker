@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Data (user-specific, persisted via Docker volume)
+data/config.json
+data/expenses.csv
+
+# IDE / tools
+.claude/
+.vscode/
+*.swp
+.DS_Store

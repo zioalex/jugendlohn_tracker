@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<form id="expense-form" method="post" action="{{ url_for('add_expense') }}">
+    <!-- Date -->
+    <div class="form-group">
+        <label class="form-label">{{ t('date') }}</label>
+        <input type="date" name="date" class="input-field" value="{{ today }}">
+    </div>
+
+    <!-- Name -->
+    <div class="form-group">
+        <label class="form-label">{{ t('name') }}</label>
+        <div class="btn-group" data-target="selected-name">
+            {% for name in config.names %}
+            <button type="button" class="btn" data-value="{{ name }}">{{ name }}</button>
+            {% endfor %}
+        </div>
+        <input type="hidden" name="name" id="selected-name" value="" data-error="{{ t('validation_name') }}">
+    </div>
+
+    <!-- Category -->
+    <div class="form-group">
+        <label class="form-label">{{ t('category') }}</label>
+        <div class="category-grid" data-target="selected-category">
+            {% for cat in config.categories %}
+            <button type="button" class="category-btn" data-value="{{ cat.key }}">
+                <span class="category-icon">{{ cat.icon }}</span>
+                <span class="category-label">{{ cat_label(cat.key) }}</span>
+            </button>
+            {% endfor %}
+        </div>
+        <input type="hidden" name="category" id="selected-category" value="" data-error="{{ t('validation_category') }}">
+    </div>
+
+    <!-- Amount -->
+    <div class="form-group">
+        <label class="form-label">{{ t('amount') }}</label>
+        <div class="amount-wrapper">
+            <span class="currency-label">{{ config.currency }}</span>
+            <input type="number" name="amount" class="input-field" inputmode="decimal" step="0.05" min="0.05" placeholder="0.00" data-error="{{ t('validation_amount') }}">
+        </div>
+    </div>
+
+    <!-- Note (toggle) -->
+    <div class="form-group">
+        <span class="note-toggle">+ {{ t('note') }}</span>
+        <div class="note-field">
+            <input type="text" name="note" class="input-field" placeholder="{{ t('note_placeholder') }}">
+        </div>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="submit-btn">{{ t('save') }}</button>
+</form>
+{% endblock %}

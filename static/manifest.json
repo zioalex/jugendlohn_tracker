@@ -1,0 +1,9 @@
+{
+  "name": "Jugendlohn Tracker",
+  "short_name": "Jugendlohn",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#2563eb",
+  "icons": []
+}

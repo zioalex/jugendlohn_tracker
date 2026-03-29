@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2563eb">
+    <title>{{ t('app_title') }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash-message flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% if config %}
+    <nav class="nav-bar">
+        <a href="{{ url_for('index') }}" class="nav-item {% if request.endpoint == 'index' %}active{% endif %}">
+            <span class="nav-icon">&#9997;&#65039;</span>
+            <span class="nav-label">{{ t('nav_entry') }}</span>
+        </a>
+        <a href="{{ url_for('history') }}" class="nav-item {% if request.endpoint == 'history' %}active{% endif %}">
+            <span class="nav-icon">&#128203;</span>
+            <span class="nav-label">{{ t('nav_history') }}</span>
+        </a>
+        <a href="{{ url_for('summary') }}" class="nav-item {% if request.endpoint == 'summary' %}active{% endif %}">
+            <span class="nav-icon">&#128202;</span>
+            <span class="nav-label">{{ t('nav_summary') }}</span>
+        </a>
+        <a href="{{ url_for('setup') }}" class="nav-item {% if request.endpoint == 'setup' %}active{% endif %}">
+            <span class="nav-icon">&#9881;&#65039;</span>
+            <span class="nav-label">{{ t('nav_settings') }}</span>
+        </a>
+        <form method="post" action="{{ url_for('switch_lang', lang='en' if lang == 'de' else 'de') }}" class="lang-toggle">
+            <button type="submit" class="lang-btn">{{ 'EN' if lang == 'de' else 'DE' }}</button>
+        </form>
+    </nav>
+    {% endif %}
+
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</body>
+</html>
