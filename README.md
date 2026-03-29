@@ -25,7 +25,7 @@ The app writes data to `data/` by default. Override with `DATA_DIR=/path/to/data
 
 ```bash
 docker-compose up --build
-# Data persists in ./data mounted into the container
+# Data persists in the named Docker volume 'jugendlohn_data'
 ```
 
 ## Configuration and data
