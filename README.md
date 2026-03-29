@@ -8,7 +8,7 @@ A lightweight Flask web app for tracking youth allowance spending. Server-render
 - Monthly summary per child and per category, with optional per-person budget tracking
 - History view with name and month filters
 - First-run setup wizard for names, currency, categories, and language (DE/EN); in-app language toggle
-- Container-ready with a bind-mounted data directory for persistence
+- Container-ready with a named Docker volume for data persistence and configurable port via `PORT`
 
 ## Quickstart (local)
 
@@ -25,7 +25,19 @@ The app writes data to `data/` by default. Override with `DATA_DIR=/path/to/data
 
 ```bash
 docker-compose up --build
+# Visits http://localhost:5000
 # Data persists in the named Docker volume 'jugendlohn_data'
+```
+
+To use a custom port:
+```bash
+PORT=8080 docker-compose up --build
+# Visit http://localhost:8080
+```
+
+Or add a `.env` file next to `docker-compose.yml`:
+```
+PORT=8080
 ```
 
 ## Configuration and data
@@ -34,7 +46,7 @@ docker-compose up --build
 - Expenses: `data/expenses.csv` (created on first save), guarded by a threading lock.
 - Environment variables:
   - `DATA_DIR`: directory for `config.json` and `expenses.csv` (default: `./data`).
-  - `PORT`: server port (default: `5000`).
+  - `PORT`: server port (default: `5000`). Set via shell or `.env` file when using Docker.
 
 Example `config.json`:
 ```json

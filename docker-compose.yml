@@ -2,7 +2,9 @@ services:
   jugendlohn:
     build: .
     ports:
-      - "5000:5000"
+      - "${PORT:-5000}:${PORT:-5000}"
+    environment:
+      - PORT=${PORT:-5000}
     volumes:
       - jugendlohn_data:/app/data
     restart: unless-stopped

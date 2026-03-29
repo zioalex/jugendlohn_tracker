@@ -36,7 +36,7 @@ A lightweight web app for parents to track their children's expenses (Jugendlohn
 │  └───────────┼──────────────┼──────────────────┘    │
 │              ▼              ▼                        │
 │  ┌───────────────────────────────────┐              │
-│  │         data/ (volume mount)      │              │
+│  │    jugendlohn_data (named volume)  │              │
 │  │   expenses.csv    config.json     │              │
 │  └───────────────────────────────────┘              │
 │                  Docker Container                    │
@@ -50,7 +50,7 @@ A lightweight web app for parents to track their children's expenses (Jugendlohn
 | Backend | Flask (Python 3.12) | Minimal, full HTML/CSS control, trivial to containerize |
 | Frontend | HTML + CSS + vanilla JS | No build step, mobile-first responsive, works on any browser |
 | Storage | CSV + JSON | No database needed for household-scale (~500 entries/year) |
-| Container | Docker + docker-compose | Volume mount for data persistence |
+| Container | Docker + docker-compose | Named volume for data persistence; configurable port via `PORT` |
 | i18n | DE/EN toggle | Translation dict in Python, injected into templates |
 
 ## Design Principles
@@ -100,7 +100,7 @@ jugendlohn_tracker/
 ├── requirements.txt        # Flask, pytest
 ├── Dockerfile
 ├── docker-compose.yml
-├── data/                   # Persisted via Docker volume
+├── data/                   # Persisted via Docker named volume (jugendlohn_data)
 │   ├── config.json         # User configuration (created by setup wizard)
 │   └── expenses.csv        # Expense data
 ├── templates/
@@ -161,8 +161,17 @@ python app.py
 
 ### Docker
 ```bash
+# Default port (5000)
 docker-compose up --build
-# Visit http://localhost:5000
+
+# Custom port via environment variable
+PORT=8080 docker-compose up --build
+# or define PORT in a .env file next to docker-compose.yml
+```
+
+Data is stored in the Docker-managed named volume `jugendlohn_data`. To inspect it:
+```bash
+docker volume inspect jugendlohn_data
 ```
 
 ### Tests
